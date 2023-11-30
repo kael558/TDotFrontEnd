@@ -9,14 +9,69 @@
   </head>
   <body>
     <h1>TDot Chatbot</h1>
-    <label for="url-input">URL:</label>
-    <input type="text" id="url-input" placeholder="https://www.tdotperformance.ca/2021-audi-a5-parts/performance-parts/air-intake-systems" size="100%">
 
+    <h3>Vehicle Information</h3>
+    <div id="year">
+      <label for="year-select">Year:</label>
+      <select name="year-select" id="year-select" onchange="updateVehicle('year', this.value)">
+        <option value="1999">1999</option>
+        <option value="2000">2000</option>
+        <option value="2001">2001</option>
+        <option value="2002">2002</option>
+        <option value="2003">2003</option>
+        <option value="2004">2004</option>
+        <option value="2020">2020</option>
+      </select>
+    </div>
+
+    <div id="make"  style="display: none;">
+      <label for="make-select">Make:</label>
+      <select name="make-select" id="make-select" onchange="updateVehicle('make', this.value)" ></select>
+    </div>
+
+    <div id="model"  style="display: none;">
+      <label for="model-select">Model:</label>
+      <select name="model-select" id="model-select" onchange="updateVehicle('model', this.value)"></select>
+    </div>
+
+    <div id="smart_submodel"  style="display: none;">
+      <label for="smart_submodel-select">Submodel:</label>
+      <select name="smart_submodel-select" id="smart_submodel-select" onchange="updateVehicle('smart_submodel', this.value)"></select>
+    </div>
+
+    <div id="wheel_size"  style="display: none;">
+      <label for="wheel_size-select">Wheel Size:</label>
+      <select name="wheel_size-select" id="wheel_size-select" onchange="updateVehicle('wheel_size', this.value)"></select>
+    </div>
+
+    <div id="tire-size" style="display: none;">
+      <label for="tire-size-select">Tire Size:</label>
+      <select name="tire-size-select" id="tire-size-select" onchange="categoryChanged()"></select>
+    </div>
+
+    <div id="loading-option" style="display: none;">
+      <p><strong>Loading...</strong></p>
+    </div>
+
+    <h3>Product Information</h3>
+    <label for="category-select">Category:</label>
+    <select name="category-select" id="category-select" onchange="categoryChanged(this.value)">
+      <option value="wheels" selected>Wheels</option>
+      <option value="tires" disabled>Tires</option>
+    </select>
+
+    <div id="product-form">
+
+    </div>
+    
+
+   
+  
     <h3>Chat </h3>
     <div id="chat-window"></div>
     <form id="message-form">
-      <input type="text" id="message-input">
-      <button type="submit">Send</button>
+      <textarea id="message-input" style="width: 800px; height: 50px; font-size: medium; padding: 2px;"></textarea>
+      <button type="submit" style="margin: 0px; ">Send</button>
     </form>
     <script src="index.js"></script>
   </body>

@@ -12,6 +12,9 @@
     width: 100px; /* Width can be adjusted based on your preference */
     margin-right: 16px;
     text-align: center;
+    overflow: hidden;
+    border-radius: 5px;
+    border: 1px black solid;
   }
   
   /* Carousel Item Image */
@@ -21,6 +24,10 @@
     margin: 0 auto 8px; /* Centers the image and adds space below */
   }
   
+.carousel-item.selected div {
+  background-color: rgb(111, 231, 111);
+}
+
   /* Product Name */
   .carousel-item p {
     margin: 4px 0;
@@ -52,6 +59,8 @@
   }
   
   .message{
-    margin: 10px 0;
+    margin: 10px 10px;
+    padding: 0px 10px 10px 10px;
     border: 1px solid #ccc;
+    border-radius: 5px;
   }
