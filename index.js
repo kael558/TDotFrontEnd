@@ -230,7 +230,7 @@ function updateChatUI(loading=false) {
                 const textElement = document.createElement('p');
                 textElement.textContent = JSON.stringify(message.debug, null, 4);
                 textElement.style.display = 'none';
-                textElement.style.paddingTop = '0px';
+                textElement.style.paddingTop = '5px';
                 textElement.style.marginTop = '0px';
                 textElement.style.marginBottom = '5px';
                 textElement.style.fontSize = '11px';
@@ -258,9 +258,10 @@ function updateChatUI(loading=false) {
                     , 2000);
                 });
                 
-                debugElement.appendChild(textElement);
+             
                 debugElement.appendChild(toggleButton);
                 debugElement.appendChild(copyRequestButton);
+                debugElement.appendChild(textElement);
 
                 messageElement.appendChild(debugElement);
             }
