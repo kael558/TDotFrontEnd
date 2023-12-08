@@ -1,45 +1,59 @@
-/*
-1. Scrape all products
-2. Integrate tire data
-3. Finish html page
-
-1. Scrape all products
-2. Integrate tire data
-3. Implement proper fitment data
-
-- selected products
-- options to sort products according to price/ stock
-- clear chat
-*/
-
 
 
 //Define an array to store chat messages 
+/*let chatMessages = [
+    {
+        "role": "assistant",
+        "content": "Hi, I'm the Tdot Performance Assistant. How can I help you today?",
+        "products": [
+            {
+                "name": "Product 1",
+                "price": "$10",
+                "custom_attributes": [
+                    {
+                        "attribute_code": "image",
+                        "value": "/w/h/whl_1.jpg"
+                    },
+                    {
+                        "attribute_code": "url_key",
+                        "value": "product-1"
+                    }
+                ]
+            },
+            {
+                "name": "Product 2",
+                "price": "$20",
+                "custom_attributes": [
+                    {
+                        "attribute_code": "image",
+                        "value": "/w/h/whl_2.jpg"
+                    },
+                    {
+                        "attribute_code": "url_key",
+                        "value": "product-2"
+                    }
+                ]
+            }
+        ],
+        "debug": {
+            "product": {
+                "name": "Product 1",
+                "imageUrl": "https://via.placeholder.com/150",
+                "price": "$10"
+            },
+            "time_taken": 0.123,
+            "tokens": 1293
+        }
+    }
+];*/
+
 let chatMessages = [];
 
 let category = "wheels";
+let vehicle_id = "";
 
 let product = {
 
-}
-
-let product_options = {
-    'wheels': [
-        {'key': 'name', 'type': 'string'}, 
-        {'key': 'brand', 'type': 'string'},
-        {'key': 'series', 'type': 'string'},
-        {'key': 'wheel_width', 'type': 'float'},
-        {'key': 'wheel_diameter', 'type': 'float'},
-        {'key': 'bolt_pattern', 'type': 'string'},
-        {'key': 'center_bore', 'type': 'float'},
-        {'key': 'offset', 'type': 'integer'},
-        {'key': 'backspacing', 'type': 'float'},
-        {'key': 'load_rating', 'type': 'integer'},
-        {'key': 'wheel_color', 'type': 'string'},
-        {'key': 'wheel_finish', 'type': 'string'},
-        {'key': 'wheel_material', 'type': 'string'},
-        {'key': 'extra_tags', 'type': 'string'}
-    ]
 }
 
 
@@ -63,59 +77,25 @@ async function sendMessage(event) {
     // merge product with product from response
     product = {...product, ...response['product']};
 
-    // update product ui
-    updateProductUI(product);
-    
-    const assistant_message = { content: response['response'], role: 'assistant', products: response['products'] };
+    const debug = response['debug'];
+    /* debug['selected_products'] = debug['selected_products'].map(product => {
+        return {
+            "name": product['name'],
+            "price": product['price'],
+            "sku": product['sku'],
+            "description": product['description'],
+        }
+    });*/
+
+
+    const assistant_message = { content: response['response'], role: 'assistant', products: response['products'], debug };
     chatMessages.push(assistant_message);
 
     // Populate the chat window with the messages
     updateChatUI(loading=false);
 }
 
-function categoryChanged(category_name){
-    let category = category_name;
-    const form = document.getElementById('product-form');
-    form.innerHTML = ''; // Clear existing fields
 
-    for (let option of product_options[category]){
-        let div = document.createElement('div');
-
-        let label = document.createElement('label');
-        label.htmlFor = option['key'];
-        label.textContent = `${option['key'].replace(/_/g, ' ')}: `;
-
-        let input = document.createElement('input');
-        input.id = option['key'];
-        input.name = option['key'];
-
-        if (option['type'] === 'string') {
-            input.type = 'text';
-        } else if (option['type'] === 'float') {
-            input.type = 'number';
-            input.step = 'any';
-        } else if (option['type'] === 'integer') {
-            input.type = 'number';
-            input.step = '1';
-        }
-
-        div.appendChild(label);
-        div.appendChild(input);
-
-
-        form.appendChild(div);
-
-        input.addEventListener('change', () => updateProduct(option['key'], input.value));
-    }
-}
-
-
-
-
-function updateProduct(key, value){
-    product[key] = value;
-    updateProductUI(product);
-}
 
 
 async function getResponse(){
@@ -141,9 +121,9 @@ async function getResponse(){
     }*/
 
     try {
-        url = document.getElementById('url-input').value || "https://www.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels-rims?rims_vehicle_id=29922"
+        url = document.getElementById('url-input').value || "https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698"
         chat_history = chatMessages.map(message => { return { content: message.content, role: message.role }});
-        selected_products = [];
+        let selected_products = [];
         for (let i = chatMessages.length - 1; i >= 0; i--){
             if (chatMessages[i].role === 'assistant'){
                 selected_products = chatMessages[i].products.filter(product => product.isSelected);
@@ -154,7 +134,7 @@ async function getResponse(){
         }
 
         const response = await fetch(
-            'https://heoaojza56rkjb7qd5f4tanycu0apume.lambda-url.us-east-1.on.aws/',
+            'https://lqvmj75x7zzg7d7ur5sindfkdi0yjqxg.lambda-url.us-east-1.on.aws/ ',
             {
                 method: 'POST',
                 body: JSON.stringify({ url, product, chat_history, selected_products }),
@@ -166,7 +146,7 @@ async function getResponse(){
         console.log(error);
         return {
             "response": "Got this error from server: " + error,
-            "products": {}
+            "products": []
         }
     }
 }
@@ -230,6 +210,34 @@ function updateChatUI(loading=false) {
             });
 
             messageElement.appendChild(carouselContainer);
+
+
+            if (message.debug){
+                const debugElement = document.createElement('div');
+                debugElement.classList.add('debug-container');
+
+                const textElement = document.createElement('p');
+                textElement.textContent = JSON.stringify(message.debug, null, 4);
+                textElement.style.display = 'none';
+                textElement.style.paddingTop = '0px';
+                textElement.style.marginTop = '0px';
+                textElement.style.marginBottom = '5px';
+                textElement.style.fontSize = '11px';
+                
+                const toggleButton = document.createElement('button');
+                toggleButton.textContent = 'Show Debug';
+                toggleButton.style.padding = '5px';
+
+                toggleButton.addEventListener('click', () => {
+                    textElement.classList.toggle('show');
+                    toggleButton.textContent = toggleButton.textContent === 'Show Debug' ? 'Hide Debug' : 'Show Debug';
+                });
+                
+                debugElement.appendChild(textElement);
+                debugElement.appendChild(toggleButton);
+
+                messageElement.appendChild(debugElement);
+            }
         }
         
         // Add the message element to the chat window
@@ -248,24 +256,15 @@ function updateChatUI(loading=false) {
 
 
 
-function updateProductUI(object){
-    copy = {...object};
-
-    if ('wheel_size' in copy){
-        copy['wheel_width'] = copy['wheel_size'].split('x')[0];
-        copy['wheel_diameter'] = copy['wheel_size'].split('x')[1];
-    }
-
-    for (let key in copy){ 
-        var input_field = document.getElementById(key);
-        if (!input_field){
-            continue;
-        }
-        input_field.setAttribute('value', copy[key]['name']);
-    }
-}
-
-
 document.getElementById('message-form').addEventListener('submit', sendMessage);
-categoryChanged(category);
+document.getElementById('url-input').addEventListener('change', () => {
+    vehicle_id = "";
+});
+
+document.getElementById('reset-button').addEventListener('click', () => {
+    chatMessages = [];
+    updateChatUI();
+    vehicle_id = "";
+});
+
 updateChatUI();

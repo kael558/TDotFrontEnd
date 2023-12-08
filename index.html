@@ -10,24 +10,51 @@
   <body>
     <h1>TDot Chatbot</h1>
 
-    <label for="url-input">URL:</label>
-    <input type="text" id="url-input" placeholder="https://www.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels-rims?rims_vehicle_id=29922" size="100%">
-
-    <h3>Product Information</h3>
-    <label for="category-select">Category:</label>
-    <select name="category-select" id="category-select" onchange="categoryChanged(this.value)">
-      <option value="wheels" selected>Wheels</option>
-      <option value="tires" disabled>Tires</option>
-    </select>
-
-    <div id="product-form">
-
+    <h2>Development Features</h2>
+    <div class="row">
+      <div class="column">
+        <h3>Completed:</h3>
+        <ul>
+          <li>Product search by attributes</li>
+          <li>Product search by text description (which wheels are constructed better/offroading)</li>
+          <li>User input SKU numbers</li>
+          <li>General response and information</li>
+        </ul>
+      </div>
+      <div class="column">
+        <h3>Todo:</h3>
+        <ul>
+          <li>Ask to clarify uncategorized product attributes</li>
+        </ul>
+      </div>
+      <div class="column">
+        <h3>Future:</h3>
+        <ul>
+          <li>Save chats and upvote/downvote response (requires another db)</li>
+          <li>Connect to live person</li>
+          <li>Check stock on wheels/tires</li>
+          <li>Allowing vehicle input in chat</li>
+          <li>RAG  for FAQ question (order information, delivery)</li>
+          <li>User input part number</li>
+          <li>RAG on vehicle information</li>
+          <li>Issue reporting (site shut down on payment info, site not allowing different billing and shipping address</li>
+          <li>Search all categories of products</li>
+        </ul>
+      </div>
     </div>
+
     
 
+
+    <label for="url-input">URL:</label>
+    <input type="text" id="url-input" placeholder="https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698" size="100%">
+
+    <button id="reset-button">Reset</button>
+
+    <h2>Chat </h2>
    
   
-    <h3>Chat </h3>
+ 
     <div id="chat-window"></div>
     <form id="message-form">
       <textarea id="message-input" style="width: 800px; height: 50px; font-size: medium; padding: 2px;"></textarea>

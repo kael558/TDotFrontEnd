@@ -64,3 +64,63 @@
     border: 1px solid #ccc;
     border-radius: 5px;
   }
+
+  .debug-container {
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: black;
+    margin-top: 10px;
+}
+
+.show {
+    display: block !important;
+}
+
+* {
+  box-sizing: border-box;
+  letter-spacing: 1px;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 0px;
+}
+
+h3 {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  border: 1px solid #ccc;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+ul {
+  padding-top: 0px;
+  margin-top: 2px;
+
+}
+
+li {
+  list-style-type: circle;
+  letter-spacing: 1px;
+}
