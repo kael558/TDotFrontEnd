@@ -17,8 +17,6 @@
 //Define an array to store chat messages 
 let chatMessages = [];
 
-let vehicle = {}
-
 let category = "wheels";
 
 let product = {
@@ -111,40 +109,8 @@ function categoryChanged(category_name){
     }
 }
 
-const order = ['year', 'make', 'model', 'smart_submodel', 'wheel_size'];
-
-function updateVehicle(key, value){
-    if (key == 'year'){
-        vehicle[key] = parseInt(value);
-    } else {
-        vehicle[key] = value;
-    }
-
-    let index = order.indexOf(key);
-    for (let i = index + 1; i < order.length; i++){
-        document.getElementById(order[i]).style.display = 'none';
-        if (order[i] in vehicle){
-            delete vehicle[order[i]];
-        }
-    }
-    getNextOptionVehicleUI();
-}
 
 
-
-async function getVehicleOptions(){
-    url = "https://ngfaq354ymz4lbvam6iom6oxxi0eqapm.lambda-url.us-east-1.on.aws/";
-    const response = await fetch(
-        url,
-        {
-            method: 'POST',
-            body: JSON.stringify({ vehicle, category}),
-        }
-    );
-
-    const data = await response.json();
-    return data;
-}
 
 function updateProduct(key, value){
     product[key] = value;
@@ -175,11 +141,12 @@ async function getResponse(){
     }*/
 
     try {
+        url = document.getElementById('url-input').value || "https://www.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels-rims?rims_vehicle_id=29922"
         chat_history = chatMessages.map(message => { return { content: message.content, role: message.role }});
         selected_products = [];
         for (let i = chatMessages.length - 1; i >= 0; i--){
             if (chatMessages[i].role === 'assistant'){
-                selected_products = chatMessages[i].products.wheels.filter(product => product.isSelected);
+                selected_products = chatMessages[i].products.filter(product => product.isSelected);
                 if (selected_products.length > 0){
                     break;
                 }
@@ -187,10 +154,10 @@ async function getResponse(){
         }
 
         const response = await fetch(
-            'https://lqvmj75x7zzg7d7ur5sindfkdi0yjqxg.lambda-url.us-east-1.on.aws/ ',
+            'https://heoaojza56rkjb7qd5f4tanycu0apume.lambda-url.us-east-1.on.aws/',
             {
                 method: 'POST',
-                body: JSON.stringify({ vehicle, product, chat_history, selected_products, category }),
+                body: JSON.stringify({ url, product, chat_history, selected_products }),
             }
         );
         const data = await response.json();
@@ -219,60 +186,50 @@ function updateChatUI(loading=false) {
             messageElement.innerHTML = `<p><strong>You:</strong> ${message.content}</p>`;
         } else if (message.role === 'assistant') {
             messageElement.innerHTML = `<p><strong>Assistant:</strong> ${message.content}</strong></p>`;
-   
-            Object.keys(message.products).forEach(category => {
-                if (message.products[category].length == 0){
-                    return;
+            
+            const carouselContainer = document.createElement('div');
+            carouselContainer.classList.add('carousel');
+
+            message.products.forEach(displayed_product => {
+                const carouselItem = document.createElement('div');
+                carouselItem.classList.add('carousel-item');
+                carouselItem.style.position = 'relative';
+        
+                if ('isSelected' in displayed_product && displayed_product.isSelected) {
+                    carouselItem.classList.add('selected'); // Add class if selected
                 }
 
-                const productsContainer = document.createElement('div');
-                const categoryTitle = document.createElement('h3');
-                categoryTitle.innerHTML = category.toUpperCase();
+                const image = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'image')['value'];
+                const url_key = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'url_key')['value'];
 
-                const carouselContainer = document.createElement('div');
-                carouselContainer.classList.add('carousel');
-            
-                message.products[category].forEach(displayed_product => {
-                    const carouselItem = document.createElement('div');
-                    carouselItem.classList.add('carousel-item');
-                    carouselItem.style.position = 'relative';
-            
-                    if ('isSelected' in displayed_product && displayed_product.isSelected) {
-                        carouselItem.classList.add('selected'); // Add class if selected
-                    }
-            
-                    carouselItem.innerHTML = `
-                        <div>
-                            <a href="https://www.tdotperformance.ca/${displayed_product.url_key}.html" target="_blank">
-                                <img src="https://www.tdotperformance.ca/media/catalog/product${displayed_product.image}" alt="${displayed_product.name}" width="100">
-                                <p>${displayed_product.name}</p>
-                            </a>
-                            <p>$${displayed_product.price}</p>
-                            <div style="position: absolute; top: 0; right: 0; width: 50px; height: 25px;">
-                                <button style="width: 100%; height: 100%;">Select</button>
-                            </div>
+                carouselItem.innerHTML = `
+                    <div>
+                        <a href="https://www.tdotperformance.ca/${url_key}.html" target="_blank">
+                            <img src="https://www.tdotperformance.ca/media/catalog/product${image}" alt="${displayed_product.name}" width="100">
+                            <p>${displayed_product.name}</p>
+                        </a>
+                        <p>$${displayed_product.price}</p>
+                        <div style="position: absolute; top: 0; right: 0; width: 50px; height: 25px;">
+                            <button style="width: 100%; height: 100%;">Select</button>
                         </div>
-                    `;
-            
-                    const selectButton = carouselItem.querySelector('button');
-                    selectButton.addEventListener('click', () => {
-                        if (!('isSelected' in displayed_product)) {
-                            displayed_product.isSelected = false;
-                        }
+                    </div>
+                `;
+        
+                const selectButton = carouselItem.querySelector('button');
+                selectButton.addEventListener('click', () => {
+                    if (!('isSelected' in displayed_product)) {
+                        displayed_product.isSelected = false;
+                    }
 
-                        displayed_product.isSelected = !displayed_product.isSelected; // Toggle isSelected property
-                        carouselItem.classList.toggle('selected', displayed_product.isSelected); // Toggle class based on isSelected
-                    });
-            
-                    carouselContainer.appendChild(carouselItem);
+                    displayed_product.isSelected = !displayed_product.isSelected; // Toggle isSelected property
+                    carouselItem.classList.toggle('selected', displayed_product.isSelected); // Toggle class based on isSelected
                 });
-
-                productsContainer.appendChild(categoryTitle);
-                productsContainer.appendChild(carouselContainer);
-
-                // Add the carousel container to the message element
-                messageElement.appendChild(productsContainer);
+        
+                carouselContainer.appendChild(carouselItem);
+                
             });
+
+            messageElement.appendChild(carouselContainer);
         }
         
         // Add the message element to the chat window
@@ -290,52 +247,6 @@ function updateChatUI(loading=false) {
 }
 
 
-async function getNextOptionVehicleUI(){
-    document.getElementById('loading-option').style.display = 'block';
-
-    for (let i = order.length - 1; i >= 0; i--){
-        // check if key is in vehicle
-        let key = order[i];
-        if (vehicle[key]){
-    
-            let index = order.indexOf(key);
-
-            if (index == order.length - 1){
-                if (order[index] == 'wheel_size'){
-                    updateProductUI(vehicle);
-                }
-
-                return;
-            }
-
-            let nextKey = order[index + 1];
-            if (nextKey){
-                // Get the values
-                let options = await getVehicleOptions();
-                if ('vehicle' in options){
-                    updateProductUI(options['vehicle']);
-                    break;
-                }
-                // Render the options
-                let select = document.getElementById(nextKey + "-select");
-                select.innerHTML = '';
-                for (let value of options['values']){
-                    let option = document.createElement('option');
-                    option.value = value;
-                    option.innerHTML = value;
-
-                    select.appendChild(option);
-                }
-
-                document.getElementById(nextKey).style.display = 'block';
-                break;
-            }
-        }
-    }
-
-    document.getElementById('loading-option').style.display = 'none';
-}
-
 
 function updateProductUI(object){
     copy = {...object};
@@ -350,7 +261,7 @@ function updateProductUI(object){
         if (!input_field){
             continue;
         }
-        input_field.setAttribute('value', copy[key]);
+        input_field.setAttribute('value', copy[key]['name']);
     }
 }
 
