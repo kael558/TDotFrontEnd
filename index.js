@@ -77,18 +77,18 @@ async function sendMessage(event) {
     // merge product with product from response
     product = {...product, ...response['product']};
 
-    const debug = response['debug'];
-    /* debug['selected_products'] = debug['selected_products'].map(product => {
+    // Remove unnecessaryinfo from products
+    const products = response['products'].map(product => {
         return {
-            "name": product['name'],
-            "price": product['price'],
-            "sku": product['sku'],
-            "description": product['description'],
+            name: product.name,
+            price: product.price,
+            sku: product.sku,
+            custom_attributes: product.custom_attributes.filter(attribute => ['image', 'url_key'].includes(attribute.attribute_code)),
+            description: product.description
         }
-    });*/
+    });
 
-
-    const assistant_message = { content: response['response'], role: 'assistant', products: response['products'], debug };
+    const assistant_message = { content: response['response'], role: 'assistant', products, debug: response['debug'] };
     chatMessages.push(assistant_message);
 
     // Populate the chat window with the messages
@@ -129,6 +129,17 @@ async function getResponse(){
                 selected_products = chatMessages[i].products.filter(product => product.isSelected);
                 if (selected_products.length > 0){
                     break;
+                }
+            }
+        }
+
+        if (selected_products.length == 0){ // Select all wheels if no wheels are selected
+            for (let i = chatMessages.length - 1; i >= 0; i--){
+                if (chatMessages[i].role === 'assistant'){
+                    if (chatMessages[i].products.length > 0){
+                        selected_products = chatMessages[i].products;
+                        break;
+                    }
                 }
             }
         }
@@ -232,9 +243,24 @@ function updateChatUI(loading=false) {
                     textElement.classList.toggle('show');
                     toggleButton.textContent = toggleButton.textContent === 'Show Debug' ? 'Hide Debug' : 'Show Debug';
                 });
+
+                const copyRequestButton = document.createElement('button');
+                copyRequestButton.textContent = 'Copy Request';
+                copyRequestButton.style.padding = '5px';
+
+                copyRequestButton.addEventListener('click', () => {
+                    navigator.clipboard.writeText(JSON.stringify(message.debug.request_body, null, 4));
+                    copyRequestButton.textContent = 'Copied!';
+
+                    setTimeout(() => {
+                        copyRequestButton.textContent = 'Copy Request';
+                    }
+                    , 2000);
+                });
                 
                 debugElement.appendChild(textElement);
                 debugElement.appendChild(toggleButton);
+                debugElement.appendChild(copyRequestButton);
 
                 messageElement.appendChild(debugElement);
             }

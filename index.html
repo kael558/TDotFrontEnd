@@ -15,8 +15,8 @@
       <div class="column">
         <h3>Completed:</h3>
         <ul>
-          <li>Product search by attributes</li>
-          <li>Product search by text description (which wheels are constructed better/offroading)</li>
+          <li>Product search by attributes (any product attribute: height, width, color, material, price, speed rating etc...)</li>
+          <li>Product search/filter by text description (which wheels are constructed better/offroading)</li>
           <li>User input SKU numbers</li>
           <li>General response and information</li>
         </ul>
@@ -24,6 +24,8 @@
       <div class="column">
         <h3>Todo:</h3>
         <ul>
+          <li>Improve design (if product attrs do not fuzzy match, then switch it to text description search)</li>
+          <li>Test tires</li>
           <li>Ask to clarify uncategorized product attributes</li>
         </ul>
       </div>
@@ -57,7 +59,7 @@
  
     <div id="chat-window"></div>
     <form id="message-form">
-      <textarea id="message-input" style="width: 800px; height: 50px; font-size: medium; padding: 2px;"></textarea>
+      <textarea id="message-input" style="width: 800px; height: 50px; font-size: medium; padding: 4px;"></textarea>
       <button type="submit" style="margin: 0px; ">Send</button>
     </form>
     <script src="index.js"></script>

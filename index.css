@@ -124,3 +124,7 @@ li {
   list-style-type: circle;
   letter-spacing: 1px;
 }
+
+#message-input{
+  padding: 2px;
+}
