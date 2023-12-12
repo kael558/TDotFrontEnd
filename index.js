@@ -88,7 +88,7 @@ async function sendMessage(event) {
         }
     });
 
-    const assistant_message = { content: response['response'], role: 'assistant', products, debug: response['debug'] };
+    const assistant_message = { content: response['response'], role: 'assistant', products, debug: response['debug'], basic_debug: response['basic_debug'] };
     chatMessages.push(assistant_message);
 
     // Populate the chat window with the messages
