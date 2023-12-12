@@ -224,24 +224,45 @@ function updateChatUI(loading=false) {
 
 
             if (message.debug){
+
+
                 const debugElement = document.createElement('div');
                 debugElement.classList.add('debug-container');
 
                 const textElement = document.createElement('p');
-                textElement.textContent = JSON.stringify(message.debug, null, 4);
-                textElement.style.display = 'none';
                 textElement.style.paddingTop = '5px';
                 textElement.style.marginTop = '0px';
                 textElement.style.marginBottom = '5px';
                 textElement.style.fontSize = '11px';
                 
-                const toggleButton = document.createElement('button');
-                toggleButton.textContent = 'Show Debug';
-                toggleButton.style.padding = '5px';
+                const showDebug = document.createElement('button');
+                showDebug.textContent = 'Show Debug';
+                showDebug.style.padding = '5px';
 
-                toggleButton.addEventListener('click', () => {
-                    textElement.classList.toggle('show');
-                    toggleButton.textContent = toggleButton.textContent === 'Show Debug' ? 'Hide Debug' : 'Show Debug';
+                const showAdvancedDebug = document.createElement('button');
+                showAdvancedDebug.textContent = 'Show Advanced Debug';
+                showAdvancedDebug.style.padding = '5px';
+
+                showDebug.addEventListener('click', () => {
+                    if (showDebug.textContent === 'Show Debug'){
+                        showDebug.textContent = 'Hide Debug';
+                        textElement.textContent = JSON.stringify(message.basic_debug, null, 4);
+                        showAdvancedDebug.textContent = 'Show Advanced Debug';
+                    } else { 
+                        showDebug.textContent = 'Show Debug';
+                        textElement.textContent = '';
+                    }
+                });
+
+                showAdvancedDebug.addEventListener('click', () => {
+                    if (showAdvancedDebug.textContent === 'Show Advanced Debug'){
+                        showAdvancedDebug.textContent = 'Hide Advanced Debug';
+                        textElement.textContent = JSON.stringify(message.debug, null, 4);
+                        showDebug.textContent = 'Show Debug';
+                    } else {
+                        showAdvancedDebug.textContent = 'Show Advanced Debug';
+                        textElement.textContent = '';
+                    }
                 });
 
                 const copyRequestButton = document.createElement('button');
@@ -249,7 +270,7 @@ function updateChatUI(loading=false) {
                 copyRequestButton.style.padding = '5px';
 
                 copyRequestButton.addEventListener('click', () => {
-                    navigator.clipboard.writeText(JSON.stringify(message.debug.request_body, null, 4));
+                    navigator.clipboard.writeText(JSON.stringify(message.debug, null, 4));
                     copyRequestButton.textContent = 'Copied!';
 
                     setTimeout(() => {
@@ -259,7 +280,8 @@ function updateChatUI(loading=false) {
                 });
                 
              
-                debugElement.appendChild(toggleButton);
+                debugElement.appendChild(showDebug);
+                debugElement.appendChild(showAdvancedDebug);
                 debugElement.appendChild(copyRequestButton);
                 debugElement.appendChild(textElement);
 
