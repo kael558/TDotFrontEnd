@@ -291,7 +291,6 @@ function updateChatUI(loading=false) {
                     sendEmailButton.textContent = 'Sending...';
                     sendEmailButton.backgroundColor = 'yellow';
                     sendEmailButton.disabled = true;
-                    console.log('disabled');
                     let response = { status: 200 };
                     try{
                         response = await fetch(
@@ -305,7 +304,6 @@ function updateChatUI(loading=false) {
                         
                     }
                   
-                    console.log("sent");
 
                     if (response.status === 200){
                         sendEmailButton.textContent = 'Sent!';
@@ -317,8 +315,7 @@ function updateChatUI(loading=false) {
             
 
                     setTimeout(() => {
-                        console.log('here');
-                        sendEmailButton.textContent = 'Send Email';
+                        sendEmailButton.textContent = 'Submit Another Issue';
                         sendEmailButton.backgroundColor = 'buttonface';
                         sendEmailButton.disabled = false;
                     }, 4000);
