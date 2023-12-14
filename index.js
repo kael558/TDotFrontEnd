@@ -314,6 +314,7 @@ document.getElementById('reset-button').addEventListener('click', () => {
     chatMessages = [];
     updateChatUI();
     vehicle_id = "";
+    product = {};
 });
 
 updateChatUI();
