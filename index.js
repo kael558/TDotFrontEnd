@@ -272,17 +272,63 @@ function updateChatUI(loading=false) {
                 copyRequestButton.addEventListener('click', () => {
                     navigator.clipboard.writeText(JSON.stringify(message.debug, null, 4));
                     copyRequestButton.textContent = 'Copied!';
+                    copyRequestButton.backgroundColor = 'green';
 
                     setTimeout(() => {
                         copyRequestButton.textContent = 'Copy Request';
+                        copyRequestButton.backgroundColor = 'buttonface';
                     }
                     , 2000);
                 });
-                
-             
+
+                const sendEmailButton = document.createElement('button');
+                sendEmailButton.textContent = 'Submit Issue';
+                sendEmailButton.style.padding = '5px';
+
+                sendEmailButton.addEventListener('click', async () => {
+                    const issue = prompt('Describe the issue:');
+
+                    sendEmailButton.textContent = 'Sending...';
+                    sendEmailButton.backgroundColor = 'yellow';
+                    sendEmailButton.disabled = true;
+                    console.log('disabled');
+                    let response = { status: 200 };
+                    try{
+                        response = await fetch(
+                            'https://a45mvwsk2g5e4jnwwb2j2sooyu0mhaie.lambda-url.us-east-1.on.aws/ ',
+                            {
+                                method: 'POST',
+                                body: JSON.stringify({ issue, debug: message.debug }),
+                            }
+                        );
+                    } catch (error) {
+                        
+                    }
+                  
+                    console.log("sent");
+
+                    if (response.status === 200){
+                        sendEmailButton.textContent = 'Sent!';
+                        sendEmailButton.backgroundColor = 'green';
+                    } else {
+                        sendEmailButton.textContent = 'Error!';
+                        sendEmailButton.backgroundColor = 'red';
+                    }
+            
+
+                    setTimeout(() => {
+                        console.log('here');
+                        sendEmailButton.textContent = 'Send Email';
+                        sendEmailButton.backgroundColor = 'buttonface';
+                        sendEmailButton.disabled = false;
+                    }, 4000);
+                });
+
                 debugElement.appendChild(showDebug);
                 debugElement.appendChild(showAdvancedDebug);
                 debugElement.appendChild(copyRequestButton);
+                debugElement.appendChild(sendEmailButton);
+
                 debugElement.appendChild(textElement);
 
                 messageElement.appendChild(debugElement);
