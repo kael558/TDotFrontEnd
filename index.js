@@ -190,8 +190,16 @@ function updateChatUI(loading=false) {
                     carouselItem.classList.add('selected'); // Add class if selected
                 }
 
-                const image = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'image')['value'];
-                const url_key = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'url_key')['value'];
+                const image = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'image')?.['value'];
+                const url_key = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'url_key')?.['value'];
+
+                if (!image){
+                    image = 'undefined.jpg';
+                }
+
+                if (!url_key){
+                    url_key = 'undefined';
+                }
 
                 carouselItem.innerHTML = `
                     <div>
