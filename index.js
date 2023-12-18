@@ -193,14 +193,6 @@ function updateChatUI(loading=false) {
                 const image = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'image')?.['value'];
                 const url_key = displayed_product['custom_attributes'].find(attribute => attribute.attribute_code === 'url_key')?.['value'];
 
-                if (!image){
-                    image = 'undefined.jpg';
-                }
-
-                if (!url_key){
-                    url_key = 'undefined';
-                }
-
                 carouselItem.innerHTML = `
                     <div>
                         <a href="https://www.tdotperformance.ca/${url_key}.html" target="_blank">
