@@ -75,6 +75,8 @@ async function sendMessage(event) {
     // merge product with product from response
     product_interpretations = response['product_interpretations']
 
+    vehicle_id = response['vehicle_id'] || vehicle_id;
+
     // Remove unnecessaryinfo from products
     const products = response['products'].map(product => {
         return {
@@ -146,7 +148,7 @@ async function getResponse(){
             'https://lqvmj75x7zzg7d7ur5sindfkdi0yjqxg.lambda-url.us-east-1.on.aws/ ',
             {
                 method: 'POST',
-                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products }),
+                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id}),
             }
         );
         const data = await response.json();
