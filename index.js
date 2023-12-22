@@ -52,9 +52,7 @@ let chatMessages = [];
 let category = "wheels";
 let vehicle_id = "";
 
-let product = {
-
-}
+let product_interpretations = [];
 
 
 
@@ -75,7 +73,7 @@ async function sendMessage(event) {
     const response = await getResponse();
 
     // merge product with product from response
-    product = {...product, ...response['product']};
+    product_interpretations = response['product_interpretations']
 
     // Remove unnecessaryinfo from products
     const products = response['products'].map(product => {
@@ -148,7 +146,7 @@ async function getResponse(){
             'https://lqvmj75x7zzg7d7ur5sindfkdi0yjqxg.lambda-url.us-east-1.on.aws/ ',
             {
                 method: 'POST',
-                body: JSON.stringify({ url, product, chat_history, selected_products }),
+                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products }),
             }
         );
         const data = await response.json();
@@ -357,7 +355,7 @@ document.getElementById('reset-button').addEventListener('click', () => {
     chatMessages = [];
     updateChatUI();
     vehicle_id = "";
-    product = {};
+    product_interpretations = [];
 });
 
 updateChatUI();
