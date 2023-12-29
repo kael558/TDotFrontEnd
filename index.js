@@ -129,7 +129,7 @@ function updateChatUI(loading=false) {
                 carouselItem.innerHTML = `
                     <div>
                         <a href="https://mcstaging.tdotperformance.ca/${url_key}.html" target="_blank">
-                            <img src="https://www.tdotperformance.ca/media/catalog/product${image}" alt="${displayed_product.name}" width="100">
+                            <img src="https://www.tdotperformance.ca/media/catalog/product${image}" alt="Image Unavailable" width="100">
                             <p>${displayed_product.name}</p>
                         </a>
                         <p>$${displayed_product.price}</p>
