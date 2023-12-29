@@ -1,52 +1,5 @@
 
 
-//Define an array to store chat messages 
-/*let chatMessages = [
-    {
-        "role": "assistant",
-        "content": "Hi, I'm the Tdot Performance Assistant. How can I help you today?",
-        "products": [
-            {
-                "name": "Product 1",
-                "price": "$10",
-                "custom_attributes": [
-                    {
-                        "attribute_code": "image",
-                        "value": "/w/h/whl_1.jpg"
-                    },
-                    {
-                        "attribute_code": "url_key",
-                        "value": "product-1"
-                    }
-                ]
-            },
-            {
-                "name": "Product 2",
-                "price": "$20",
-                "custom_attributes": [
-                    {
-                        "attribute_code": "image",
-                        "value": "/w/h/whl_2.jpg"
-                    },
-                    {
-                        "attribute_code": "url_key",
-                        "value": "product-2"
-                    }
-                ]
-            }
-        ],
-        "debug": {
-            "product": {
-                "name": "Product 1",
-                "imageUrl": "https://via.placeholder.com/150",
-                "price": "$10"
-            },
-            "time_taken": 0.123,
-            "tokens": 1293
-        }
-    }
-];*/
-
 let chatMessages = [];
 
 let category = "wheels";
@@ -54,7 +7,8 @@ let vehicle_id = "";
 
 let product_interpretations = [];
 
-
+let email_url = "";
+let chat_url = "";
 
 
 // Define a function to send a message function 
@@ -99,27 +53,6 @@ async function sendMessage(event) {
 
 
 async function getResponse(){
-    /*return {
-        "response": "Awesome to hear!",
-        "products": [
-            {
-                "name": "Product 1",
-                "imageUrl": "https://via.placeholder.com/150",
-                "price": "$10"
-            },
-            {
-                "name": "Product 2",
-                "imageUrl": "https://via.placeholder.com/150",
-                "price": "$20"
-            },
-            {
-                "name": "Product 3",
-                "imageUrl": "https://via.placeholder.com/150",
-                "price": "$30"
-            }
-        ]
-    }*/
-
     try {
         url = document.getElementById('url-input').value || "https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698"
         chat_history = chatMessages.map(message => { return { content: message.content, role: message.role }});
@@ -145,7 +78,7 @@ async function getResponse(){
         }
 
         const response = await fetch(
-            'https://lqvmj75x7zzg7d7ur5sindfkdi0yjqxg.lambda-url.us-east-1.on.aws/ ',
+            chat_url,
             {
                 method: 'POST',
                 body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id}),
@@ -294,7 +227,7 @@ function updateChatUI(loading=false) {
                     let response = { status: 200 };
                     try{
                         response = await fetch(
-                            'https://a45mvwsk2g5e4jnwwb2j2sooyu0mhaie.lambda-url.us-east-1.on.aws/ ',
+                            email_url,
                             {
                                 method: 'POST',
                                 body: JSON.stringify({ issue, debug: message.debug }),
@@ -358,6 +291,36 @@ document.getElementById('reset-button').addEventListener('click', () => {
     updateChatUI();
     vehicle_id = "";
     product_interpretations = [];
+});
+
+document.getElementById('signInForm').addEventListener('submit', async function(event){
+    event.preventDefault();
+
+    const passcode = document.getElementById('passcode').value;
+
+    console.log(passcode);
+    console.log(JSON.stringify({ passcode }));
+
+    const response = await fetch(
+        'https://qk636fcww4j53k4vrozlxevywa0trzea.lambda-url.us-east-1.on.aws/',
+        {
+            method: 'POST',
+            body: JSON.stringify({ passcode }),
+        }
+    );
+
+    const data = await response.json();
+
+    if (data['status'] === 'success'){
+        document.getElementById('signInForm').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+
+        // set urls
+        email_url = data['email_url'];
+        chat_url = data['chat_url'];
+    } else {
+        alert('Wrong passcode');
+    }
 });
 
 updateChatUI();

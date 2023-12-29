@@ -8,62 +8,72 @@
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <h1>TDot Chatbot</h1>
-
-    <h2>Development Features</h2>
-    <div class="row">
-      <div class="column">
-        <h3>Completed:</h3>
-        <ul>
-          <li>Product search by attributes (any product attribute: height, width, color, material, price, speed rating etc...)</li>
-          <li>Product search/filter by text description (which wheels are constructed better/offroading)</li>
-          <li>User input SKU numbers</li>
-          <li>General response and information</li>
-          <li>Improve design (if product attrs do not fuzzy match, then switch it to text description search)</li>
-          <li>Select/Get all products if none are selected</li>
-          <li>Added tires</li>
-          <li>Added all exhaust parts</li>
-          <li>Many interpretations approach</li>
-        </ul>
-      </div>
-      <div class="column">
-        <h3>Todo:</h3>
-        <ul>
-          <li>Save chats and upvote/downvote response (requires another db)</li>
-          <li>User input part number</li>
-        </ul>
-      </div>
-      <div class="column">
-        <h3>Future:</h3>
-        <ul>
-          <li>Connect to live person</li>
-          <li>Check stock on wheels/tires</li>
-          <li>Allowing vehicle input in chat</li>
-          <li>RAG  for FAQ question (order information, delivery)</li>
-          <li>RAG on vehicle information</li>
-          <li>Issue reporting (site shut down on payment info, site not allowing different billing and shipping address</li>
-          <li>Search all categories of products</li>
-        </ul>
-      </div>
+    <h1>TDot Chatbot Test Site</h1>
+    <div id="sign-in">
+      <form id="signInForm">
+        <label for="passcode">Passcode:</label>
+        <input type="passcode" id="passcode" name="passcode" required>
+        <button type="submit">Sign In</button>
+      </form>
     </div>
 
+    <div id="content" style="display: none;">
+      <h2>Development Features</h2>
+      <div class="row">
+        <div class="column">
+          <h3>Completed:</h3>
+          <ul>
+            <li>Product search by attributes (any product attribute: height, width, color, material, price, speed rating etc...)</li>
+            <li>Product search/filter by text description (which wheels are constructed better/offroading)</li>
+            <li>User input SKU numbers</li>
+            <li>General response and information</li>
+            <li>Improve design (if product attrs do not fuzzy match, then switch it to text description search)</li>
+            <li>Select/Get all products if none are selected</li>
+            <li>Added tires</li>
+            <li>Added all exhaust parts</li>
+            <li>Many interpretations approach</li>
+          </ul>
+        </div>
+        <div class="column">
+          <h3>Todo:</h3>
+          <ul>
+            <li>Save chats and upvote/downvote response (requires another db)</li>
+            <li>User input part number</li>
+          </ul>
+        </div>
+        <div class="column">
+          <h3>Future:</h3>
+          <ul>
+            <li>Connect to live person</li>
+            <li>Check stock on wheels/tires</li>
+            <li>Allowing vehicle input in chat</li>
+            <li>RAG  for FAQ question (order information, delivery)</li>
+            <li>RAG on vehicle information</li>
+            <li>Issue reporting (site shut down on payment info, site not allowing different billing and shipping address</li>
+            <li>Search all categories of products</li>
+          </ul>
+        </div>
+      </div>
+
+      
+
+
+      <label for="url-input">URL:</label>
+      <input type="text" id="url-input" placeholder="https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698" size="100%">
+
+      <button id="reset-button">Reset</button>
+
+      <h2>Chat </h2>
     
-
-
-    <label for="url-input">URL:</label>
-    <input type="text" id="url-input" placeholder="https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698" size="100%">
-
-    <button id="reset-button">Reset</button>
-
-    <h2>Chat </h2>
-   
+    
   
- 
-    <div id="chat-window"></div>
-    <form id="message-form">
-      <textarea id="message-input" style="width: 800px; height: 50px; font-size: medium; padding: 4px;"></textarea>
-      <button type="submit" style="margin: 0px; ">Send</button>
-    </form>
-    <script src="index.js"></script>
+      <div id="chat-window"></div>
+      <form id="message-form">
+        <textarea id="message-input" style="width: 800px; height: 50px; font-size: medium; padding: 4px;"></textarea>
+        <button type="submit" style="margin: 0px; ">Send</button>
+      </form>
+      <script src="index.js"></script>
+      
+    </div>
   </body>
 </html>
