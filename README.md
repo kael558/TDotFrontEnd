@@ -42,8 +42,9 @@ The logic is as follows:
 {  
     "url": "https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698",  
     "chat_history": [{"role": "user", "content": "hi, how are you?"}],  
-    "product_interpretations": [],  
-    "selected_products": []  
+    "product_interpretations": [], // populated by result
+    "selected_products": [], // products selected by user
+    "vehicle_id": null // populated by result
 }
 ```
 
