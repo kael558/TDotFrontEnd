@@ -4,7 +4,7 @@ TESTING SITE URL: https://kael558.github.io/TDotFrontEnd/
 ### chat_history
 A list of Messages. Each object contains 2 properties: "role" and "content". 
  - "role" can be either "user" or "assistant".
- - "content" is the string message from either the user or the assistant
+ - "content" is the string message from either the user or the assistant  
 
 Example: 
 ```
@@ -20,7 +20,7 @@ let chat_history = [
 ```
 
 ### url
-The current url of the page that the user is on (contains the category of product and vehicle information)
+The current url of the page that the user is on (contains the category of product and vehicle information)  
 Example:  `let url = "https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698"`
 
 ### product_interpretations
