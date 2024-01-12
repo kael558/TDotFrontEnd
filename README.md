@@ -48,7 +48,7 @@ The logic is as follows:
 }
 ```
 
-## Request 
+## Request example:
 ```
 const response = await fetch(
     chat_url,
