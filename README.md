@@ -48,6 +48,17 @@ The logic is as follows:
 }
 ```
 
+## Request 
+```
+const response = await fetch(
+    chat_url,
+    {
+        method: 'POST',
+        body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id}),
+    }
+);
+```
+
 ## Response handling:
 Basic flow to handle response from endpoint.
 ```
