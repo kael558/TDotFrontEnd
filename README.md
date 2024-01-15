@@ -37,6 +37,9 @@ The logic is as follows:
 - Finds the last suggested products within the chat_messages
 - If any products are selected within that, then filter it down to those products, otherwise set selected_products to all of the latest suggested products.
 
+### session_id
+Retrieve from cookie storage or generate a random string (upto 32 chars - not finalized) and pass it in the request
+
 ### Request Example:
 ```
 {  
@@ -45,6 +48,7 @@ The logic is as follows:
     "product_interpretations": [], // populated by result
     "selected_products": [], // products selected by user
     "vehicle_id": null // populated by result
+    "session_id": "test_1929j2"
 }
 ```
 
@@ -54,7 +58,7 @@ const response = await fetch(
     chat_url,
     {
         method: 'POST',
-        body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id}),
+        body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id, session_id}),
     }
 );
 ```

@@ -100,7 +100,7 @@ async function getResponse(){
             chat_url,
             {
                 method: 'POST',
-                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id, all_products }),
+                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id, all_products, session_id: 'test' }),
                 signal: abortController.signal,
             },   
         );
@@ -325,7 +325,12 @@ function updateChatUI(loading=false) {
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-
+document.getElementById('message-input').addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById('message-form').dispatchEvent(new Event('submit'));
+    }
+});
 
 document.getElementById('message-form').addEventListener('submit', sendMessage);
 document.getElementById('url-input').addEventListener('change', () => {
