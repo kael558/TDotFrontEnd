@@ -10,6 +10,7 @@ let product_interpretations = [];
 let email_url = "";
 let chat_url = "";
 
+let abortController = new AbortController();
 
 // Define a function to send a message function 
 async function sendMessage(event) { 
@@ -25,6 +26,11 @@ async function sendMessage(event) {
 
     // Call the API to create the message
     const response = await getResponse();
+
+    if (response === null) {
+        updateChatUI(loading=false);
+        return;
+    }
 
     // merge product with product from response
     product_interpretations = response['product_interpretations']
@@ -51,7 +57,6 @@ async function sendMessage(event) {
 
 
 
-
 async function getResponse(){
     try {
         url = document.getElementById('url-input').value || "https://mcstaging.tdotperformance.ca/all-all-all-parts/wheels-tires/wheels?rims_vehicle_id=22698"
@@ -66,6 +71,7 @@ async function getResponse(){
             }
         }
 
+   
         if (selected_products.length == 0){ // Select all wheels if no wheels are selected
             for (let i = chatMessages.length - 1; i >= 0; i--){
                 if (chatMessages[i].role === 'assistant'){
@@ -76,17 +82,36 @@ async function getResponse(){
                 }
             }
         }
+        
+        let all_products = [];
+        let names = new Set();
+        for (let i = 0; i< chatMessages.length; i++){
+            if (chatMessages[i].role === 'assistant'){
+                for (let j = 0; j < chatMessages[i].products.length; j++){
+                    if (!names.has(chatMessages[i].products[j].name)){
+                        all_products.push(chatMessages[i].products[j]);
+                    }
+                    names.add(chatMessages[i].products[j].name);
+                }
+            }
+        }
 
         const response = await fetch(
             chat_url,
             {
                 method: 'POST',
-                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id}),
-            }
+                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id, all_products }),
+                signal: abortController.signal,
+            },   
         );
+
+
         const data = await response.json();
         return data;
     } catch (error) {
+        if (error.name === 'AbortError') {
+            return null;
+        }
         console.log(error);
         return {
             "response": "Got this error from server: " + error,
@@ -270,9 +295,30 @@ function updateChatUI(loading=false) {
     });
 
     if (loading) {
+        // disable text input
+        document.getElementById('message-input').disabled = true;
+
         const loadingElement = document.createElement('div');
         loadingElement.innerHTML = '<p><strong>Assistant:</strong> Loading...</p>';
         chatWindow.appendChild(loadingElement);
+
+        const stopButton = document.createElement('button');
+        stopButton.textContent = 'Stop';
+        stopButton.style.padding = '5px';
+        stopButton.style.marginTop = '0px';
+        stopButton.style.marginBottom = '5px';
+        stopButton.style.fontSize = '15px';
+        
+        stopButton.addEventListener('click', () => {
+            abortController.abort();
+            abortController = new AbortController();
+            updateChatUI();
+        });
+
+        chatWindow.appendChild(stopButton);
+    } else {
+        // enable text input
+        document.getElementById('message-input').disabled = false;
     }
 
     // Scroll to the bottom of the chat window
@@ -323,4 +369,4 @@ document.getElementById('signInForm').addEventListener('submit', async function(
     }
 });
 
-updateChatUI();
+updateChatUI(false);
