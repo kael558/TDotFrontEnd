@@ -228,7 +228,7 @@ function updateChatUI(loading=false) {
                 copyRequestButton.style.padding = '5px';
 
                 copyRequestButton.addEventListener('click', () => {
-                    navigator.clipboard.writeText(JSON.stringify(message.debug, null, 4));
+                    navigator.clipboard.writeText(JSON.stringify(message.debug.request_body, null, 4));
                     copyRequestButton.textContent = 'Copied!';
                     copyRequestButton.backgroundColor = 'green';
 
