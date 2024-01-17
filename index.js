@@ -12,6 +12,13 @@ let chat_url = "";
 
 let abortController = new AbortController();
 
+// Generate a random session id
+let session_id = 'test';
+function generateSessionId() {
+    session_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    document.getElementById('session-id').textContent = session_id;
+}
+
 // Define a function to send a message function 
 async function sendMessage(event) { 
     event.preventDefault();
@@ -96,9 +103,7 @@ async function getResponse(){
             }
         }
 
-        // Generate a random session id
-        const session_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
+   
         const response = await fetch(
             chat_url,
             {
@@ -343,6 +348,7 @@ document.getElementById('url-input').addEventListener('change', () => {
 document.getElementById('reset-button').addEventListener('click', () => {
     chatMessages = [];
     updateChatUI();
+    generateSessionId();
     vehicle_id = "";
     product_interpretations = [];
 });
@@ -378,3 +384,4 @@ document.getElementById('signInForm').addEventListener('submit', async function(
 });
 
 updateChatUI(false);
+generateSessionId();
