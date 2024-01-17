@@ -96,11 +96,14 @@ async function getResponse(){
             }
         }
 
+        // Generate a random session id
+        const session_id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
         const response = await fetch(
             chat_url,
             {
                 method: 'POST',
-                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id, all_products, session_id: 'test' }),
+                body: JSON.stringify({ url, product_interpretations, chat_history, selected_products, vehicle_id, all_products, session_id }),
                 signal: abortController.signal,
             },   
         );
